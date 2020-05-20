@@ -29,6 +29,7 @@ public class VipController {
 
     @GetMapping("/list")
     public BaseResultVO setMealList(@Valid BaseDataDTO dataDTO){
+        System.out.println("vip");
         List<SetMeal> meals = setMealService.getAllMeal();
         List<Object> list = VoFactory.doBackwardList(meals, SetMealVO.class);
         return new SuccessResultVO(list);
