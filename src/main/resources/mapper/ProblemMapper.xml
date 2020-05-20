@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mongolia.dao.ProblemMapper">
+  <resultMap id="BaseResultMap" type="com.mongolia.model.entity.Problem">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="problem" jdbcType="VARCHAR" property="problem" />
+    <result column="answer" jdbcType="VARCHAR" property="answer" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_del" jdbcType="SMALLINT" property="isDel" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, problem, answer, create_time, update_time, is_del
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM problem
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM problem WHERE is_del='0'
+    </select>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.mongolia.model.dto.SearchDTO">
+        SELECT <include refid="Base_Column_List"/> FROM problem WHERE is_del='0'
+        <if test="name != null">
+            AND problem LIKE concat('%',#{name},'%')
+        </if>
+        <if test="start != null and end != null">
+            AND (create_time BeTWEEN #{start} AND #{end})
+        </if>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    DELETE FROM problem
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mongolia.model.entity.Problem">
+    INSERT INTO problem (id, problem, answer,
+      create_time, update_time, is_del
+      )
+    VALUES (#{id,jdbcType=INTEGER}, #{problem,jdbcType=VARCHAR}, #{answer,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isDel,jdbcType=SMALLINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mongolia.model.entity.Problem">
+    INSERT INTO problem
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="problem != null">
+        problem,
+      </if>
+      <if test="answer != null">
+        answer,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="problem != null">
+        #{problem,jdbcType=VARCHAR},
+      </if>
+      <if test="answer != null">
+        #{answer,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mongolia.model.entity.Problem">
+    UPDATE problem
+    <set>
+      <if test="problem != null">
+        problem = #{problem,jdbcType=VARCHAR},
+      </if>
+      <if test="answer != null">
+        answer = #{answer,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=SMALLINT},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mongolia.model.entity.Problem">
+    UPDATE problem
+    SET problem = #{problem,jdbcType=VARCHAR},
+      answer = #{answer,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=SMALLINT}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

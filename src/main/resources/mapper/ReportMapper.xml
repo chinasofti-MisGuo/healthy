@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mongolia.dao.ReportMapper">
+  <resultMap id="BaseResultMap" type="com.mongolia.model.entity.Report">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="describe" jdbcType="VARCHAR" property="describe" />
+    <result column="dynamic_id" jdbcType="BIGINT" property="dynamicId" />
+    <result column="whistle_uid" jdbcType="BIGINT" property="whistleUid" />
+    <result column="receive_uid" jdbcType="BIGINT" property="receiveUid" />
+    <result column="type_id" jdbcType="INTEGER" property="typeId" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+    
+    <resultMap id="ExtensionResultMap" type="com.mongolia.model.entity.Report">
+        <association property="phone" column="whistle_uid" select="com.mongolia.dao.UserMapper.selectPhoneByUid"/>
+        <association property="receiveName" column="receive_uid" select="com.mongolia.dao.UserMapper.selectNikeNameByUid"/>
+        <association property="dynamicName" column="dynamic_id" select="com.mongolia.dao.DynamicMapper.selectTitleById"/>
+        <association property="whistleName" column="whistle_uid" select="com.mongolia.dao.UserMapper.selectNikeNameByUid"/>
+    </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, `describe`, dynamic_id, whistle_uid, receive_uid, type_id, image, create_time,
+    is_del
+  </sql>
+  <select id="selectByExample" parameterType="com.mongolia.model.example.ReportExample" resultMap="ExtensionResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from report
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from report
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from report
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.mongolia.model.example.ReportExample">
+    delete from report
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.mongolia.model.entity.Report">
+    insert into report (id, describe, dynamic_id, 
+      whistle_uid, receive_uid, type_id, 
+      image, create_time, is_del
+      )
+    values (#{id,jdbcType=BIGINT}, #{describe,jdbcType=VARCHAR}, #{dynamicId,jdbcType=BIGINT}, 
+      #{whistleUid,jdbcType=BIGINT}, #{receiveUid,jdbcType=BIGINT}, #{typeId,jdbcType=INTEGER}, 
+      #{image,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{isDel,jdbcType=SMALLINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mongolia.model.entity.Report">
+    insert into report
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="describe != null">
+        `describe`,
+      </if>
+      <if test="dynamicId != null">
+        dynamic_id,
+      </if>
+      <if test="whistleUid != null">
+        whistle_uid,
+      </if>
+      <if test="receiveUid != null">
+        receive_uid,
+      </if>
+      <if test="typeId != null">
+        type_id,
+      </if>
+      <if test="image != null">
+        image,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="describe != null">
+        #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="dynamicId != null">
+        #{dynamicId,jdbcType=BIGINT},
+      </if>
+      <if test="whistleUid != null">
+        #{whistleUid,jdbcType=BIGINT},
+      </if>
+      <if test="receiveUid != null">
+        #{receiveUid,jdbcType=BIGINT},
+      </if>
+      <if test="typeId != null">
+        #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="image != null">
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.mongolia.model.example.ReportExample" resultType="java.lang.Integer">
+    select count(*) from report
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+    <select id="selectByCondition" resultMap="ExtensionResultMap" parameterType="com.mongolia.model.dto.SearchDTO">
+        (SELECT r.id, r.`describe`, r.dynamic_id, r.whistle_uid, r.receive_uid, r.type_id, r.image, r.create_time
+        FROM report AS r JOIN user AS u ON r.whistle_uid = u.uid
+        WHERE u.is_del = 0 AND r.is_del=0
+        <if test="name != null and name != ''">
+            AND u.nickname LIKE concat('%',#{name},'%')
+        </if>
+        <if test="phone != null and phone != ''">
+            AND u.phone LIKE concat('%',#{phone},'%')
+        </if>
+        <if test="title != null and title != ''">
+            AND r.type_id = #{title}
+        </if>)
+        <if test="beName != null and beName != ''">
+            UNION (SELECT r.id, r.`describe`, r.dynamic_id, r.whistle_uid, r.receive_uid, r.type_id, r.image, r.create_time
+            FROM report AS r JOIN user AS u ON  r.receive_uid=u.uid
+            WHERE u.is_del = 0 AND r.is_del=0 AND u.nickname LIKE concat('%',#{beName}, '%'))
+        </if>
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map">
+    update report
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.describe != null">
+        describe = #{record.describe,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dynamicId != null">
+        dynamic_id = #{record.dynamicId,jdbcType=BIGINT},
+      </if>
+      <if test="record.whistleUid != null">
+        whistle_uid = #{record.whistleUid,jdbcType=BIGINT},
+      </if>
+      <if test="record.receiveUid != null">
+        receive_uid = #{record.receiveUid,jdbcType=BIGINT},
+      </if>
+      <if test="record.typeId != null">
+        type_id = #{record.typeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.image != null">
+        image = #{record.image,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDel != null">
+        is_del = #{record.isDel,jdbcType=SMALLINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update report
+    set id = #{record.id,jdbcType=BIGINT},
+      describe = #{record.describe,jdbcType=VARCHAR},
+      dynamic_id = #{record.dynamicId,jdbcType=BIGINT},
+      whistle_uid = #{record.whistleUid,jdbcType=BIGINT},
+      receive_uid = #{record.receiveUid,jdbcType=BIGINT},
+      type_id = #{record.typeId,jdbcType=INTEGER},
+      image = #{record.image,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      is_del = #{record.isDel,jdbcType=SMALLINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mongolia.model.entity.Report">
+    update report
+    <set>
+      <if test="describe != null">
+        describe = #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="dynamicId != null">
+        dynamic_id = #{dynamicId,jdbcType=BIGINT},
+      </if>
+      <if test="whistleUid != null">
+        whistle_uid = #{whistleUid,jdbcType=BIGINT},
+      </if>
+      <if test="receiveUid != null">
+        receive_uid = #{receiveUid,jdbcType=BIGINT},
+      </if>
+      <if test="typeId != null">
+        type_id = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="image != null">
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mongolia.model.entity.Report">
+    update report
+    set describe = #{describe,jdbcType=VARCHAR},
+      dynamic_id = #{dynamicId,jdbcType=BIGINT},
+      whistle_uid = #{whistleUid,jdbcType=BIGINT},
+      receive_uid = #{receiveUid,jdbcType=BIGINT},
+      type_id = #{typeId,jdbcType=INTEGER},
+      image = #{image,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=SMALLINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

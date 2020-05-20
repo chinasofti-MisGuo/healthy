@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mongolia.dao.AdminRolesMapper">
+    <resultMap id="BaseResultMap" type="com.mongolia.model.entity.AdminRoles">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="roles_name" jdbcType="VARCHAR" property="rolesName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="is_del" jdbcType="BIT" property="isDel"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, roles_name, create_time, update_time, is_del
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from admin_roles
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectListRoles" resultType="com.mongolia.model.entity.AdminRoles">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM admin_roles WHERE is_del=0
+    </select>
+
+    <select id="selectRoleNameById" resultType="java.lang.String">
+        SELECT roles_name FROM admin_roles WHERE id=#{id}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE
+        FROM admin_roles
+        WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.mongolia.model.entity.AdminRoles">
+        INSERT INTO admin_roles (id, roles_name, create_time,
+                                 update_time, is_del)
+        VALUES (#{id,jdbcType=INTEGER}, #{rolesName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                #{updateTime,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.mongolia.model.entity.AdminRoles" useGeneratedKeys="true" keyProperty="id">
+        insert into admin_roles
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="rolesName != null">
+                roles_name,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="isDel != null">
+                is_del,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="rolesName != null">
+                #{rolesName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDel != null">
+                #{isDel,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.mongolia.model.entity.AdminRoles">
+        update admin_roles
+        <set>
+            <if test="rolesName != null">
+                roles_name = #{rolesName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDel != null">
+                is_del = #{isDel,jdbcType=BIT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.mongolia.model.entity.AdminRoles">
+        UPDATE admin_roles
+        SET roles_name  = #{rolesName,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            is_del      = #{isDel,jdbcType=BIT}
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

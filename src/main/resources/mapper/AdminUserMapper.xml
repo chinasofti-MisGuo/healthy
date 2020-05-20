@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mongolia.dao.AdminUserMapper">
+  <resultMap id="BaseResultMap" type="com.mongolia.model.entity.AdminUser">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="admin_uid" jdbcType="VARCHAR" property="adminUid" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="radio_id" jdbcType="INTEGER" property="radioId" />
+    <result column="roles_id" jdbcType="INTEGER" property="rolesId" />
+    <result column="phone" jdbcType="CHAR" property="phone" />
+    <result column="token" jdbcType="VARCHAR" property="token" />
+    <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+  </resultMap>
+    
+    <resultMap id="ExtensionResultMap" type="com.mongolia.model.entity.AdminUser">
+        <association property="roles" select="com.mongolia.dao.AdminRolesMapper.selectRoleNameById" column="roles_id"/>
+    </resultMap>
+  <sql id="Base_Column_List">
+    id, username, admin_uid, `password`, radio_id, roles_id, phone, token, login_time, 
+    create_time, update_time, is_del
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from admin_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+    <select id="selectCountByAdminUid" resultType="java.lang.Integer">
+        SELECT count(*) FROM admin_user WHERE admin_uid=#{adminUid}
+    </select>
+
+    <select id="selectUserList" resultMap="ExtensionResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM admin_user WHERE is_del=0
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from admin_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mongolia.model.entity.AdminUser">
+    insert into admin_user (id, username, admin_uid, 
+      `password`, radio_id, roles_id, 
+      phone, token, login_time, 
+      create_time, update_time, is_del
+      )
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{adminUid,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{radioId,jdbcType=INTEGER}, #{rolesId,jdbcType=INTEGER}, 
+      #{phone,jdbcType=CHAR}, #{token,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mongolia.model.entity.AdminUser">
+    insert into admin_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="adminUid != null">
+        admin_uid,
+      </if>
+      <if test="password != null">
+        `password`,
+      </if>
+      <if test="radioId != null">
+        radio_id,
+      </if>
+      <if test="rolesId != null">
+        roles_id,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="token != null">
+        token,
+      </if>
+      <if test="loginTime != null">
+        login_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="adminUid != null">
+        #{adminUid,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="radioId != null">
+        #{radioId,jdbcType=INTEGER},
+      </if>
+      <if test="rolesId != null">
+        #{rolesId,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=CHAR},
+      </if>
+      <if test="token != null">
+        #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null">
+        #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mongolia.model.entity.AdminUser">
+    update admin_user
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="adminUid != null">
+        admin_uid = #{adminUid,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        `password` = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="radioId != null">
+        radio_id = #{radioId,jdbcType=INTEGER},
+      </if>
+      <if test="rolesId != null">
+        roles_id = #{rolesId,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=CHAR},
+      </if>
+      <if test="token != null">
+        token = #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null">
+        login_time = #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mongolia.model.entity.AdminUser">
+    update admin_user
+    set username = #{username,jdbcType=VARCHAR},
+      admin_uid = #{adminUid,jdbcType=VARCHAR},
+      `password` = #{password,jdbcType=VARCHAR},
+      radio_id = #{radioId,jdbcType=INTEGER},
+      roles_id = #{rolesId,jdbcType=INTEGER},
+      phone = #{phone,jdbcType=CHAR},
+      token = #{token,jdbcType=VARCHAR},
+      login_time = #{loginTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

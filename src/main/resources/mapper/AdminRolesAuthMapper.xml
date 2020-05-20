@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mongolia.dao.AdminRolesAuthMapper">
+    <resultMap id="BaseResultMap" type="com.mongolia.model.entity.AdminRolesAuth">
+        <id column="id" jdbcType="SMALLINT" property="id"/>
+        <result column="roles_id" jdbcType="INTEGER" property="rolesId"/>
+        <result column="auth_id" jdbcType="INTEGER" property="authId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="is_del" jdbcType="BIT" property="isDel"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, roles_id, auth_id, create_time, update_time, is_del
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Short" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from admin_roles_auth
+        where id = #{id,jdbcType=SMALLINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Short">
+        DELETE
+        FROM admin_roles_auth
+        WHERE id = #{id,jdbcType=SMALLINT}
+    </delete>
+
+    <delete id="deleteByRolesId">
+        DELETE FROM admin_roles_auth WHERE roles_id=#{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.mongolia.model.entity.AdminRolesAuth">
+        INSERT INTO admin_roles_auth (id, roles_id, auth_id,
+                                      create_time, update_time, is_del)
+        VALUES (#{id,jdbcType=SMALLINT}, #{rolesId,jdbcType=INTEGER}, #{authId,jdbcType=INTEGER},
+                #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.mongolia.model.entity.AdminRolesAuth">
+        insert into admin_roles_auth
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="rolesId != null">
+                roles_id,
+            </if>
+            <if test="authId != null">
+                auth_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="isDel != null">
+                is_del,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=SMALLINT},
+            </if>
+            <if test="rolesId != null">
+                #{rolesId,jdbcType=INTEGER},
+            </if>
+            <if test="authId != null">
+                #{authId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDel != null">
+                #{isDel,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertSelectiveList" parameterType="java.util.List">
+        insert into admin_roles_auth (id, roles_id, auth_id,create_time)
+        <foreach collection="rolesAuths" item="item" separator=",">
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="item.id != null">
+                    #{itme.id,jdbcType=SMALLINT},
+                </if>
+                <if test="item.rolesId != null">
+                    #{item.rolesId,jdbcType=INTEGER},
+                </if>
+                <if test="item.authId != null">
+                    #{item.authId,jdbcType=INTEGER},
+                </if>
+                <if test="item.createTime != null">
+                    #{item.createTime,jdbcType=TIMESTAMP},
+                </if>
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.mongolia.model.entity.AdminRolesAuth">
+        update admin_roles_auth
+        <set>
+            <if test="rolesId != null">
+                roles_id = #{rolesId,jdbcType=INTEGER},
+            </if>
+            <if test="authId != null">
+                auth_id = #{authId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDel != null">
+                is_del = #{isDel,jdbcType=BIT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=SMALLINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.mongolia.model.entity.AdminRolesAuth">
+        UPDATE admin_roles_auth
+        SET roles_id    = #{rolesId,jdbcType=INTEGER},
+            auth_id     = #{authId,jdbcType=INTEGER},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            is_del      = #{isDel,jdbcType=BIT}
+        WHERE id = #{id,jdbcType=SMALLINT}
+    </update>
+</mapper>

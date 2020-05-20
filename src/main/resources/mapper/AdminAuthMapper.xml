@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mongolia.dao.AdminAuthMapper">
+  <resultMap id="BaseResultMap" type="com.mongolia.model.entity.AdminAuth">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="auth_title" jdbcType="VARCHAR" property="authTitle" />
+    <result column="is_del" jdbcType="INTEGER" property="isDel" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, auth_title, is_del, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from admin_auth
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+    <select id="selectAllAuth" resultMap="BaseResultMap">
+        SELECT id, auth_title FROM admin_auth WHERE is_del=0
+    </select>
+
+    <select id="selectRolesAuth" resultMap="BaseResultMap">
+        SELECT a.id, a.auth_title FROM admin_auth AS a JOIN admin_roles_auth AS ra ON a.id=ra.auth_id JOIN
+            admin_roles AS r ON ra.roles_id=r.id WHERE r.id=#{id}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from admin_auth
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mongolia.model.entity.AdminAuth">
+    insert into admin_auth (id, auth_title, is_del, 
+      create_time)
+    values (#{id,jdbcType=INTEGER}, #{authTitle,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mongolia.model.entity.AdminAuth">
+    insert into admin_auth
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="authTitle != null">
+        auth_title,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="authTitle != null">
+        #{authTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mongolia.model.entity.AdminAuth">
+    update admin_auth
+    <set>
+      <if test="authTitle != null">
+        auth_title = #{authTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mongolia.model.entity.AdminAuth">
+    update admin_auth
+    set auth_title = #{authTitle,jdbcType=VARCHAR},
+      is_del = #{isDel,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

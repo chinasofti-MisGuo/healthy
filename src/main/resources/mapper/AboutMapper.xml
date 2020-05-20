@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mongolia.dao.AboutMapper">
+  <resultMap id="BaseResultMap" type="com.mongolia.model.entity.About">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="is_del" jdbcType="SMALLINT" property="isDel" />
+    <result column="function" jdbcType="LONGVARCHAR" property="function" />
+    <result column="legal_statement" jdbcType="LONGVARCHAR" property="legalStatement" />
+    <result column="agreement" jdbcType="LONGVARCHAR" property="agreement" />
+      <result column="use_agreement" jdbcType="LONGVARCHAR" property="useAgreement"/>
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id,`function`, legal_statement, agreement,use_agreement, phone, url, email,is_del, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id,`function`, legal_statement, agreement, phone, url, email from about WHERE is_del='0' LIMIT 1
+  </select>
+
+    <select id="selectUseAreement" resultType="java.lang.String">
+        SELECT use_agreement FROM about WHERE is_del=0 LIMIT 1
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from about
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mongolia.model.entity.About">
+    insert into about ( `function`, legal_statement, agreement, phone, url,
+      email, is_del, create_time,
+      update_time, `function`, legal_statement, 
+      agreement)
+    values (#{function}, #{legalStatement}, #{agreement}, #{phone,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},
+      #{email,jdbcType=VARCHAR}, #{isDel,jdbcType=SMALLINT}, #{createTime,jdbcType=TIMESTAMP},
+      #{updateTime,jdbcType=TIMESTAMP}, #{function,jdbcType=LONGVARCHAR}, #{legalStatement,jdbcType=LONGVARCHAR}, 
+      #{agreement,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mongolia.model.entity.About">
+    insert into about
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="function != null">
+          `function`,
+      </if>
+      <if test="legalStatement != null">
+          legal_statement,
+      </if>
+      <if test="agreement != null">
+          agreement,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="function != null">
+        `function`,
+      </if>
+      <if test="legalStatement != null">
+        legal_statement,
+      </if>
+      <if test="agreement != null">
+        agreement,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="function != null">
+          #{function},
+      </if>
+      <if test="legalStatement != null">
+          #{legalStatement},
+      </if>
+      <if test="agreement != null">
+          #{agreement},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=SMALLINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="function != null">
+        #{function,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="legalStatement != null">
+        #{legalStatement,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="agreement != null">
+        #{agreement,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mongolia.model.entity.About">
+    update about
+    <set>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=SMALLINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="function != null">
+        `function` = #{function,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="legalStatement != null">
+        legal_statement = #{legalStatement,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="agreement != null">
+        agreement = #{agreement,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mongolia.model.entity.About">
+    update about
+    set phone = #{phone,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      agreement=#{agreement},
+      is_del = #{isDel,jdbcType=SMALLINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

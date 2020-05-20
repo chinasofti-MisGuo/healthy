@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mongolia.dao.AudioDirMapper" >
+  <resultMap id="BaseResultMap" type="com.mongolia.model.entity.AudioDir" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="class_id" property="classId" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="introduce" property="introduce" jdbcType="VARCHAR" />
+    <result column="image_path" property="imagePath" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="flag" property="flag" jdbcType="SMALLINT" />
+    <result column="if_rel" property="ifRel" jdbcType="SMALLINT" />
+    <result column="if_rec" property="ifRec" jdbcType="SMALLINT" />
+    <result column="is_del" property="isDel" jdbcType="SMALLINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+    <resultMap id="ExampleResultMap" type="com.mongolia.model.entity.AudioDir" extends="BaseResultMap">
+        <association property="clazzName" select="com.mongolia.dao.AudioClassMapper.selectNameByPrimaryKey" column="class_id"/>
+        <collection property="tagList" select="com.mongolia.dao.TagMapper.selectTagByAudioId" column="id"/>
+    </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, class_id, title, introduce, image_path, price, flag, if_rel, if_rec, is_del, 
+    create_time, update_time
+  </sql>
+  <select id="selectByExample" resultMap="ExampleResultMap" parameterType="com.mongolia.model.example.AudioDirExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from audio_dir
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from audio_dir
+    where id = #{id,jdbcType=BIGINT} AND is_del=0
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from audio_dir
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.mongolia.model.example.AudioDirExample" >
+    delete from audio_dir
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.mongolia.model.entity.AudioDir" >
+    insert into audio_dir (id, class_id, title, 
+      introduce, image_path, price, 
+      flag, if_rel, if_rec, 
+      is_del, create_time, update_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{classId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
+      #{introduce,jdbcType=VARCHAR}, #{imagePath,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
+      #{flag,jdbcType=SMALLINT}, #{ifRel,jdbcType=SMALLINT}, #{ifRec,jdbcType=SMALLINT}, 
+      #{isDel,jdbcType=SMALLINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mongolia.model.entity.AudioDir" useGeneratedKeys="true" keyProperty="id" keyColumn="id" >
+    insert into audio_dir
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="classId != null" >
+        class_id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="introduce != null" >
+        introduce,
+      </if>
+      <if test="imagePath != null" >
+        image_path,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="flag != null" >
+        flag,
+      </if>
+      <if test="ifRel != null" >
+        if_rel,
+      </if>
+      <if test="ifRec != null" >
+        if_rec,
+      </if>
+      <if test="isDel != null" >
+        is_del,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="classId != null" >
+        #{classId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null" >
+        #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="imagePath != null" >
+        #{imagePath,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="flag != null" >
+        #{flag,jdbcType=SMALLINT},
+      </if>
+      <if test="ifRel != null" >
+        #{ifRel,jdbcType=SMALLINT},
+      </if>
+      <if test="ifRec != null" >
+        #{ifRec,jdbcType=SMALLINT},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=SMALLINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.mongolia.model.example.AudioDirExample" resultType="java.lang.Integer" >
+    select count(*) from audio_dir
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+    <select id="selectJoinCollect" resultMap="ExampleResultMap">
+        SELECT  a.id, a.class_id, a.title, a.introduce, a.image_path, a.price, a.flag
+                FROM audio_dir AS a JOIN collection c ON a.id=c.coll_id WHERE c.uid=#{uid} AND a.is_del=0
+             AND c.flag=1 AND c.is_del=0
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map" >
+    update audio_dir
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.classId != null" >
+        class_id = #{record.classId,jdbcType=INTEGER},
+      </if>
+      <if test="record.title != null" >
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.introduce != null" >
+        introduce = #{record.introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imagePath != null" >
+        image_path = #{record.imagePath,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null" >
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.flag != null" >
+        flag = #{record.flag,jdbcType=SMALLINT},
+      </if>
+      <if test="record.ifRel != null" >
+        if_rel = #{record.ifRel,jdbcType=SMALLINT},
+      </if>
+      <if test="record.ifRec != null" >
+        if_rec = #{record.ifRec,jdbcType=SMALLINT},
+      </if>
+      <if test="record.isDel != null" >
+        is_del = #{record.isDel,jdbcType=SMALLINT},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update audio_dir
+    set id = #{record.id,jdbcType=BIGINT},
+      class_id = #{record.classId,jdbcType=INTEGER},
+      title = #{record.title,jdbcType=VARCHAR},
+      introduce = #{record.introduce,jdbcType=VARCHAR},
+      image_path = #{record.imagePath,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=DECIMAL},
+      flag = #{record.flag,jdbcType=SMALLINT},
+      if_rel = #{record.ifRel,jdbcType=SMALLINT},
+      if_rec = #{record.ifRec,jdbcType=SMALLINT},
+      is_del = #{record.isDel,jdbcType=SMALLINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mongolia.model.entity.AudioDir" >
+    update audio_dir
+    <set >
+      <if test="classId != null" >
+        class_id = #{classId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null" >
+        introduce = #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="imagePath != null" >
+        image_path = #{imagePath,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="flag != null" >
+        flag = #{flag,jdbcType=SMALLINT},
+      </if>
+      <if test="ifRel != null" >
+        if_rel = #{ifRel,jdbcType=SMALLINT},
+      </if>
+      <if test="ifRec != null" >
+        if_rec = #{ifRec,jdbcType=SMALLINT},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=SMALLINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mongolia.model.entity.AudioDir" >
+    update audio_dir
+    set class_id = #{classId,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      introduce = #{introduce,jdbcType=VARCHAR},
+      image_path = #{imagePath,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      flag = #{flag,jdbcType=SMALLINT},
+      if_rel = #{ifRel,jdbcType=SMALLINT},
+      if_rec = #{ifRec,jdbcType=SMALLINT},
+      is_del = #{isDel,jdbcType=SMALLINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
