@@ -36,6 +36,7 @@ public class UserController {
 
     @GetMapping("/home")
     public BaseResultVO personHomePage(@Valid BaseDataDTO dataDTO) {
+        System.out.println();
         Map<String, Object> result = userService.personHomePageDetail(dataDTO);
         return new SuccessResultVO(result);
     }
