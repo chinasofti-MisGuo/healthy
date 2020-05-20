@@ -38,6 +38,7 @@ public class UserController {
     public BaseResultVO personHomePage(@Valid BaseDataDTO dataDTO) {
         System.out.println();
         Map<String, Object> result = userService.personHomePageDetail(dataDTO);
+fff
         return new SuccessResultVO(result);
     }
 
